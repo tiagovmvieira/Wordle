@@ -1,7 +1,5 @@
 import sys
 
-from colorama import Fore
-
 from wordle import Wordle
 from reporter import Reporter
 
@@ -16,10 +14,10 @@ def main():
             wordle.set_word_to_check(word=word)
 
             if len(word) != wordle.word_length:
-                print(Fore.RED + f"Word must be {wordle.word_length} characters long!" + Fore.RESET)
+                reporter.report(characters_exceeded=True)
                 continue
             elif not wordle.word_exist:
-                print(Fore.RED + "Word provided does not exist in the English dictionary." + Fore.RESET)
+                reporter.report(word_not_found=True)
                 continue
 
         except KeyboardInterrupt:
@@ -31,8 +29,7 @@ def main():
             wordle.attempt(word)
             reporter.display_results()
 
-    print(f"You've solved the puzzle in {wordle.taken_attempts} attempts!") if wordle.is_solved\
-        else print("You failed to solve the puzzle")
+    reporter.report(final_message=True)
 
 if __name__ == '__main__':
     main()
