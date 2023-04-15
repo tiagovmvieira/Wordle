@@ -15,10 +15,10 @@ class Reporter:
             print(Fore.RED + "Word provided does not exist in the English dictionary." + Fore.RESET)
         elif kwargs.get('final_message'):
             print(f"You've solved the puzzle in {self.wordle.taken_attempts} attempts!") if self.wordle.is_solved\
-                else print(f"You failed to solve the puzzle\nThe answer was {Fore.CYAN + self.wordle.secret + Fore.RESET}.")
+                else print(f"You failed to solve the puzzle\nThe answer was {Fore.CYAN + self.wordle.instance_secret + Fore.RESET}.")
         elif kwargs.get('give_up'):
             print("\n\nYou Gave Up!")
-            print(f"The answer was {self.wordle.secret}.")
+            print(f"The answer was {self.wordle.instance_secret}.")
             self.display_results(give_up=True)
             print("Exiting...")
 
