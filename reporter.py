@@ -8,6 +8,15 @@ class Reporter:
     def __init__(self, wordle: Wordle):
         self.wordle = wordle
 
+    def report(self, **kwargs):
+        if kwargs.get('characters_exceeded'):
+            print(Fore.RED + f"Word must be {self.wordle.word_length} characters long!" + Fore.RESET)
+        elif kwargs.get('word_not_found'):
+            print(Fore.RED + "Word provided does not exist in the English dictionary." + Fore.RESET)
+        elif kwargs.get('final_message'):
+            print(f"You've solved the puzzle in {self.wordle.taken_attempts} attempts!") if self.wordle.is_solved\
+                else print(f"You failed to solve the puzzle\nThe answer was {Fore.CYAN + self.wordle.secret + Fore.RESET}.")
+
     def _convert_result_to_color(self, result: List[LetterState])-> str:
         result_with_color = []
 
