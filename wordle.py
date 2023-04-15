@@ -19,7 +19,7 @@ class Wordle:
     def __init__(self):
         self.session = requests.Session()
 
-        self.secret : str = self._get_secret_word()
+        self._secret : str = self._get_secret_word()
         self.attempts : list = []
         print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
 
@@ -52,8 +52,8 @@ class Wordle:
         for i in range(self.word_length):
             character = word[i]
             letter = LetterState(character=character)
-            letter.is_in_word = character in self.secret 
-            letter.is_in_position = character == self.secret[i]
+            letter.is_in_word = character in self._secret 
+            letter.is_in_position = character == self._secret[i]
 
             result.append(letter)
 
@@ -63,8 +63,12 @@ class Wordle:
         self.word_to_check: str = word
 
     @property
+    def instance_secret(self)-> str:
+        return self._secret
+
+    @property
     def is_solved(self)-> bool:
-        return len(self.attempts) > 0 and self.attempts[-1] == self.secret
+        return len(self.attempts) > 0 and self.attempts[-1] == self._secret
     
     @property
     def remaining_attempts(self)-> int:
@@ -89,6 +93,4 @@ class Wordle:
             headers=self._dictionary_api_headers
         )
 
-        return False if r.status_code != 200 else True
-
-
+        return False if "message" in r.json() else True
