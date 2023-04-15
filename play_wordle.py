@@ -13,12 +13,13 @@ def main():
     while wordle.can_attempt:
         try:
             word = input("\nType your guess: ")
+            wordle.set_word_to_check(word=word)
 
             if len(word) != wordle.word_length:
                 print(Fore.RED + f"Word must be {wordle.word_length} characters long!" + Fore.RESET)
                 continue
-            elif not word.isalpha():
-                print(Fore.RED + "Your guess should contain only letters!" + Fore.RESET)
+            elif not wordle.word_exist:
+                print(Fore.RED + "Word provided does not exist in the English dictionary." + Fore.RESET)
                 continue
 
         except KeyboardInterrupt:
