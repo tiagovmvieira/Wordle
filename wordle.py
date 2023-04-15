@@ -1,7 +1,8 @@
 import sys
 import maskpass
+import requests
 
-from typing import Union, List
+from typing import List
 from colorama import Fore
 
 from letter_state import LetterState
@@ -10,27 +11,28 @@ from letter_state import LetterState
 class Wordle:
     _max_number_of_attempts = 6
     word_length = 5
-
-    keyboard = [
-        {'Q': "q", 'W': "w", 'E': "e", 'R': "r", 'T': "t", 'y': "y", 'U': "u", 'I': "i", 'O': "o", 'P': "p"},
-        {'A': "a", 'S': "s", 'D': "d", 'F': "f", 'G': "g", 'H': "h", 'J': "j", 'K': "k", 'L': "l", 'Ç': "ç"},
-        {'Z': "z", 'X': "x", 'C': "c", 'V': "v", 'B': "b", 'N': "n", 'M': "m"}
-    ]
+    _dictionary_api_url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
+    _dictionary_api_headers = {
+        "Accept": "application/json"
+    }
 
     def __init__(self):
+        self.session = requests.Session()
+
         self.secret : str = self._get_secret_word()
         self.attempts : list = []
 
     def _get_secret_word(self)-> str:
         while True:
             try:
-                secret = maskpass.askpass(prompt="Enter the Secret Word: ", mask="*").upper()
+                self.word_to_check: str = maskpass.askpass(prompt="Enter the Secret Word: ", mask="*").upper()
 
-                if len(secret) != self.word_length:
+                if len(self.word_to_check) != self.word_length:
                     print(Fore.RED + f"Secret word must be {self.word_length} characters long!" + Fore.RESET)
-                elif not secret.isalpha():
-                    print(Fore.RED + "Secret word should contain only letters!" + Fore.RESET)
+                elif not self.word_exist:
+                    print(Fore.RED + "Secret word provided does not exist in the English dictionary." + Fore.RESET)
                 else:
+                    secret = self.word_to_check
                     break
             except KeyboardInterrupt:
                 print("\n\nSecret Word input cancelled!")
@@ -56,6 +58,9 @@ class Wordle:
 
         return result
 
+    def set_word_to_check(self, word: str)-> None:
+        self.word_to_check: str = word
+
     @property
     def is_solved(self)-> bool:
         return len(self.attempts) > 0 and self.attempts[-1] == self.secret
@@ -70,7 +75,19 @@ class Wordle:
 
     @property
     def can_attempt(self)-> bool:
-        return self.remaining_attempts > 0 and not self.is_solved   
+        return self.remaining_attempts > 0 and not self.is_solved
 
+    @property
+    def word_exist(self)-> bool:
+        if not self.word_to_check:
+            return False 
+
+        r = self.session.request(
+            url=self._dictionary_api_url + self.word_to_check,
+            method="GET",
+            headers=self._dictionary_api_headers
+        )
+
+        return False if r.status_code != 200 else True
 
 
