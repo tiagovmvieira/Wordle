@@ -16,6 +16,11 @@ class Reporter:
         elif kwargs.get('final_message'):
             print(f"You've solved the puzzle in {self.wordle.taken_attempts} attempts!") if self.wordle.is_solved\
                 else print(f"You failed to solve the puzzle\nThe answer was {Fore.CYAN + self.wordle.secret + Fore.RESET}.")
+        elif kwargs.get('give_up'):
+            print("\n\nYou Gave Up!")
+            print(f"The answer was {self.wordle.secret}.")
+            self.display_results(give_up=True)
+            print("Exiting...")
 
     def _convert_result_to_color(self, result: List[LetterState])-> str:
         result_with_color = []
@@ -50,9 +55,10 @@ class Reporter:
     def _draw_keyboard():
         pass
 
-    def display_results(self):
-        print("\nYour results so far...")
-        print(f"You have {self.wordle.remaining_attempts} attempts remaining.")
+    def display_results(self, give_up=False):
+        if not give_up:
+            print("\nYour results so far...")
+            print(f"You have {self.wordle.remaining_attempts} attempts remaining.")
 
         lines = []
 
