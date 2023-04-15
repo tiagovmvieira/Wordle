@@ -21,8 +21,7 @@ def main():
                 continue
 
         except KeyboardInterrupt:
-            print("\n\nGuess input cancelled!")
-            print("Exiting...")
+            reporter.report(give_up=True)
             sys.exit()
 
         else:
