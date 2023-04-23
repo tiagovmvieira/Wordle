@@ -7,6 +7,7 @@ def main():
     print("Hello Wordle!")
     wordle = Wordle()
     reporter = Reporter(wordle=wordle)
+    reporter.report(initial_message=True)
 
     while wordle.can_attempt:
         try:
