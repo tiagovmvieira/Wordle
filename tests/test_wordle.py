@@ -39,3 +39,9 @@ def test_is_solved(valid_wordle: Wordle):
 
     valid_wordle.attempt('apple')
     assert valid_wordle.is_solved == True
+
+def test_taken_attempts(valid_wordle: Wordle):
+    valid_wordle.attempt("hello")
+    valid_wordle.attempt("world")
+
+    assert valid_wordle.taken_attempts == 2
