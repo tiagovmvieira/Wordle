@@ -21,7 +21,6 @@ class Wordle:
 
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
-        print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
 
     def _get_secret_word(self)-> str:
         while True:
