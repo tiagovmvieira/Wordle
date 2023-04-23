@@ -7,6 +7,7 @@ from letter_state import LetterState
 class Reporter:
     def __init__(self, wordle: Wordle):
         self.wordle = wordle
+        print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
 
     def report(self, **kwargs):
         if kwargs.get('characters_exceeded'):
