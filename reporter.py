@@ -7,9 +7,10 @@ from letter_state import LetterState
 class Reporter:
     def __init__(self, wordle: Wordle):
         self.wordle = wordle
-        print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
 
     def report(self, **kwargs):
+        if kwargs.get('initial_message'):
+            print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
         if kwargs.get('characters_exceeded'):
             print(Fore.RED + f"Word must be {self.wordle.word_length} characters long!" + Fore.RESET)
         elif kwargs.get('word_not_found'):
@@ -41,6 +42,7 @@ class Reporter:
 
     @staticmethod
     def _draw_game_board(lines: List[str], size: int = 9, padding: int = 1):
+        print('\n')
         content_length = size + padding * 2
 
         top_border = "┌" + "─" * content_length + "┐"
@@ -53,8 +55,22 @@ class Reporter:
         print(bottom_border)
 
     @staticmethod
-    def _draw_keyboard():
-        pass
+    def _update_keyboard(result: List[LetterState], keyboard: List[dict]):
+        for letter in result:
+            if letter.is_in_position:
+                color = Fore.GREEN
+            elif letter.is_in_word:
+                color = Fore.YELLOW
+            else:
+                color = Fore.WHITE
+
+            keyboard[letter] = color + letter.character + Fore.RESET
+
+    @staticmethod
+    def _draw_keyboard(keyboard: List[dict]):
+        for row in keyboard:
+            print(' '.join(row.values()))
+
 
     def display_results(self, give_up=False):
         if not give_up:
@@ -66,10 +82,14 @@ class Reporter:
         for word in self.wordle.attempts:
             result = self.wordle.guess(word)
             colored_result_str = self._convert_result_to_color(result=result)
+            self.wordle.update_keyboard(result=result)
+            print(self.wordle.keyboard)
+            # self._update_keyboard(keyboard=self.wordle.keyboard)
             lines.append(colored_result_str)
 
         for _ in range(self.wordle.remaining_attempts):
             lines.append(" ".join(["_"] * self.wordle.word_length))
 
         self._draw_game_board(lines=lines)
-        self._draw_keyboard()
+        self._draw_keyboard(keyboard=self.wordle.keyboard)
+        print('------------------')
