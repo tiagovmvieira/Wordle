@@ -15,6 +15,12 @@ class Wordle:
     _dictionary_api_headers = {
         "Accept": "application/json"
     }
+    
+    keyboard = [
+        {'Q': 'Q', 'W': 'W', 'E': 'E', 'R': 'R', 'T': 'T', 'Y': 'Y', 'U': 'U', 'I': 'I', 'O': 'O', 'P': 'P'},
+        {'A': 'A', 'S': 'S', 'D': 'D', 'F': 'F', 'G': 'G', 'H': 'H', 'J': 'J', 'K': 'K', 'L': 'L', 'Ç': 'Ç'},
+        {'Z': 'Z', 'X': 'X', 'C': 'C', 'V': 'V', 'B': 'B', 'N': 'N', 'M': 'M'}
+    ]
 
     def __init__(self):
         self.session = requests.Session()
@@ -60,6 +66,21 @@ class Wordle:
 
     def set_word_to_check(self, word: str)-> None:
         self.word_to_check: str = word
+
+    def update_keyboard(self, result: List[LetterState]):
+        for letter in result:
+            if letter.is_in_position:
+                color = Fore.GREEN
+            elif letter.is_in_word:
+                color = Fore.YELLOW
+            else:
+                color = Fore.WHITE
+
+            i = 0
+            for row in self.keyboard:
+                if letter.character in list(row.keys()):
+                    self.keyboard[i][letter.character] = f"{color}{letter.character}{Fore.RESET}"
+                i += 1
 
     @property
     def instance_secret(self)-> str:
