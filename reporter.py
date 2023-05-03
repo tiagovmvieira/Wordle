@@ -21,7 +21,8 @@ class Reporter:
         elif kwargs.get('give_up'):
             print("\n\nYou Gave Up!")
             print(f"The answer was {self.wordle.instance_secret}.")
-            self.display_results(give_up=True)
+            if self.wordle.attempts:
+                self.display_results(give_up=True)
             print("Exiting...")
 
     def _convert_result_to_color(self, result: List[LetterState])-> str:
