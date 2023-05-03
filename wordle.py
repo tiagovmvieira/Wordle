@@ -76,11 +76,9 @@ class Wordle:
             else:
                 color = Fore.WHITE
 
-            i = 0
-            for row in self.keyboard:
-                if letter.character in list(row.keys()):
+            for i, row in enumerate(self.keyboard):
+                if letter.character in row:
                     self.keyboard[i][letter.character] = f"{color}{letter.character}{Fore.RESET}"
-                i += 1
 
     @property
     def instance_secret(self)-> str:
