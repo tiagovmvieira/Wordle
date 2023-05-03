@@ -54,22 +54,9 @@ class Reporter:
         print(bottom_border)
 
     @staticmethod
-    def _update_keyboard(result: List[LetterState], keyboard: List[dict]):
-        for letter in result:
-            if letter.is_in_position:
-                color = Fore.GREEN
-            elif letter.is_in_word:
-                color = Fore.YELLOW
-            else:
-                color = Fore.WHITE
-
-            keyboard[letter] = color + letter.character + Fore.RESET
-
-    @staticmethod
     def _draw_keyboard(keyboard: List[dict]):
         for row in keyboard:
             print(' '.join(row.values()))
-
 
     def display_results(self, give_up=False):
         if not give_up:
