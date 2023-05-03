@@ -83,8 +83,6 @@ class Reporter:
             result = self.wordle.guess(word)
             colored_result_str = self._convert_result_to_color(result=result)
             self.wordle.update_keyboard(result=result)
-            print(self.wordle.keyboard)
-            # self._update_keyboard(keyboard=self.wordle.keyboard)
             lines.append(colored_result_str)
 
         for _ in range(self.wordle.remaining_attempts):
