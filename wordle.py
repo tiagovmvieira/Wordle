@@ -67,18 +67,19 @@ class Wordle:
     def set_word_to_check(self, word: str)-> None:
         self.word_to_check: str = word
 
-    def update_keyboard(self, result: List[LetterState]):
+    @classmethod
+    def update_keyboard(cls, result: List[LetterState]):
         for letter in result:
             if letter.is_in_position:
                 color = Fore.GREEN
             elif letter.is_in_word:
                 color = Fore.YELLOW
             else:
-                color = Fore.WHITE
+                color = Fore.RED
 
-            for i, row in enumerate(self.keyboard):
+            for i, row in enumerate(cls.keyboard):
                 if letter.character in row:
-                    self.keyboard[i][letter.character] = f"{color}{letter.character}{Fore.RESET}"
+                    cls.keyboard[i][letter.character] = f"{color}{letter.character}{Fore.RESET}"
 
     @property
     def instance_secret(self)-> str:
