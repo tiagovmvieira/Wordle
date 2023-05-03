@@ -42,7 +42,6 @@ class Reporter:
 
     @staticmethod
     def _draw_game_board(lines: List[str], size: int = 9, padding: int = 1):
-        print('\n')
         content_length = size + padding * 2
 
         top_border = "┌" + "─" * content_length + "┐"
@@ -88,6 +87,9 @@ class Reporter:
         for _ in range(self.wordle.remaining_attempts):
             lines.append(" ".join(["_"] * self.wordle.word_length))
 
+        print('\n')
+        print(f'- Attempt {self.wordle.taken_attempts} -')
         self._draw_game_board(lines=lines)
+        print('\n')
         self._draw_keyboard(keyboard=self.wordle.keyboard)
-        print('------------------')
+        print('-------------')
