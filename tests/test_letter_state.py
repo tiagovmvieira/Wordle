@@ -1,6 +1,6 @@
 import pytest
 
-from letter_state import LetterState
+from wordle.letter_state import LetterState
 
 @pytest.fixture
 def letter_state():

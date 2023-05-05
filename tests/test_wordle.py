@@ -1,6 +1,6 @@
 import pytest
 import maskpass
-from wordle import Wordle
+from wordle.wordle import Wordle
 
 @pytest.fixture
 def valid_wordle(monkeypatch):

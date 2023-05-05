@@ -4,7 +4,7 @@ import maskpass
 from colorama import Fore
 
 from wordle import Wordle
-from reporter import Reporter
+from wordle.reporter import Reporter
 
 @pytest.fixture
 def valid_wordle(monkeypatch):
