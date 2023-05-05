@@ -21,7 +21,7 @@ class Wordle:
         {'Z': 'Z', 'X': 'X', 'C': 'C', 'V': 'V', 'B': 'B', 'N': 'N', 'M': 'M'}
     ]
 
-    def __init__(self, word_length):
+    def __init__(self, word_length: int):
         self.word_length = word_length
 
         self.session = requests.Session()
