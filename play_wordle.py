@@ -1,11 +1,21 @@
 import sys
+import argparse
 
 from wordle.wordle import Wordle
 from wordle.reporter import Reporter
 
 def main():
+    def parse_arguments():
+        parser = argparse.ArgumentParser(description="Wordle Game CLI")
+        parser.add_argument("--word_lenght", type=int,
+                            help="The length of the word to be guessed (default: %(default)s)",
+                            choices=range(5, 11), default=5, metavar='[5-10]')
+        return parser.parse_args()
+
+    args = parse_arguments()
+
     print("Hello Wordle!")
-    wordle = Wordle()
+    wordle = Wordle(word_length=args.word_lenght)
     reporter = Reporter(wordle=wordle)
     reporter.report(initial_message=True)
 
