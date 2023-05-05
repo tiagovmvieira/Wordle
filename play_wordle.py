@@ -1,7 +1,7 @@
 import sys
 
-from wordle import Wordle
-from reporter import Reporter
+from wordle.wordle import Wordle
+from wordle.reporter import Reporter
 
 def main():
     print("Hello Wordle!")
