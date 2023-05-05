@@ -10,7 +10,6 @@ from wordle.letter_state import LetterState
 
 class Wordle:
     _max_number_of_attempts = 6
-    word_length = 5
     _dictionary_api_url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
     _dictionary_api_headers = {
         "Accept": "application/json"
@@ -22,9 +21,10 @@ class Wordle:
         {'Z': 'Z', 'X': 'X', 'C': 'C', 'V': 'V', 'B': 'B', 'N': 'N', 'M': 'M'}
     ]
 
-    def __init__(self):
-        self.session = requests.Session()
+    def __init__(self, word_length):
+        self.word_length = word_length
 
+        self.session = requests.Session()
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
 
