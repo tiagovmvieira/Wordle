@@ -2,11 +2,15 @@ import pytest
 import maskpass
 from wordle.wordle import Wordle
 
-@pytest.fixture
-def valid_wordle(monkeypatch):
+@pytest.fixture(params=[5])
+def valid_wordle(request, monkeypatch):
     secret = "apple"
     monkeypatch.setattr(maskpass, 'askpass', lambda prompt, mask: secret)
-    return Wordle()
+    return Wordle(word_length=request.param)
+
+def test_wordle_init(valid_wordle: Wordle):
+    assert valid_wordle.word_length == 5
+    assert valid_wordle.attempts == []
 
 def test_word_exist(valid_wordle: Wordle):
     valid_wordle.set_word_to_check("hello")
