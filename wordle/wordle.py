@@ -115,6 +115,8 @@ class Wordle:
             )
 
             r.raise_for_status()
-            return False if "message" in r.json() else True
-        except (HTTPError, ConnectionError, Timeout, RequestException) as error:
-                raise SystemError(f"Error on the API request - {error}")
+            return True
+        except HTTPError:
+            return False
+        except (ConnectionError, Timeout, RequestException) as error:
+            raise SystemError(f"Error on the API request - {error}")
