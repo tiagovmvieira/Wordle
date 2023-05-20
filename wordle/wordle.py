@@ -4,6 +4,7 @@ import requests
 
 from typing import List
 from colorama import Fore
+from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 
 from wordle.letter_state import LetterState
 
@@ -25,6 +26,7 @@ class Wordle:
         self.word_length = word_length
 
         self.session = requests.Session()
+        self._word_exist: bool = False
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
 
@@ -106,10 +108,18 @@ class Wordle:
         if not self.word_to_check:
             return False 
 
-        r = self.session.request(
-            url=self._dictionary_api_url + self.word_to_check,
-            method="GET",
-            headers=self._dictionary_api_headers
-        )
+        try:
+            r = self.session.request(
+                url=self._dictionary_api_url + self.word_to_check,
+                method="GET",
+                headers=self._dictionary_api_headers
+            )
 
-        return False if "message" in r.json() else True
+            r.raise_for_status()
+            self._word_exist = False if "message" in r.json() else True
+
+        except (HTTPError, ConnectionError, Timeout, RequestException) as error:
+            self._word_exist = False
+            raise SystemError(f"Error on the API request - {error}")
+
+        return self._word_exist
