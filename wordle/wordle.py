@@ -26,7 +26,6 @@ class Wordle:
         self.word_length = word_length
 
         self.session = requests.Session()
-        self._word_exist: bool = False
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
 
@@ -116,10 +115,6 @@ class Wordle:
             )
 
             r.raise_for_status()
-            self._word_exist = False if "message" in r.json() else True
-
+            return False if "message" in r.json() else True
         except (HTTPError, ConnectionError, Timeout, RequestException) as error:
-            self._word_exist = False
-            raise SystemError(f"Error on the API request - {error}")
-
-        return self._word_exist
+                raise SystemError(f"Error on the API request - {error}")
