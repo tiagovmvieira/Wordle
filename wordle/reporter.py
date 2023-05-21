@@ -42,8 +42,8 @@ class Reporter:
         return " ".join(result_with_color)
 
     @staticmethod
-    def _draw_game_board(lines: List[str], size: int = 9, padding: int = 1):
-        content_length = size + padding * 2
+    def _draw_game_board(lines: List[str], word_length: int,  size: int = 9, padding: int = 1):
+        content_length = (size + padding * 2) * word_length // 5
 
         top_border = "┌" + "─" * content_length + "┐"
         bottom_border = "└" + "─" * content_length + "┘"
@@ -76,8 +76,9 @@ class Reporter:
             lines.append(" ".join(["_"] * self.wordle.word_length))
 
         print('\n')
-        print(f'- Attempt {self.wordle.taken_attempts} -')
-        self._draw_game_board(lines=lines)
+        if not give_up:
+            print(f'- Attempt {self.wordle.taken_attempts} -')
+        self._draw_game_board(lines=lines, word_length=self.wordle.word_length)
         print('\n')
         self._draw_keyboard(keyboard=self.wordle.keyboard)
         print('-------------')
