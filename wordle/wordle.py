@@ -23,7 +23,7 @@ class Wordle:
     ]
 
     def __init__(self, word_length: int):
-        self.word_length = word_length
+        self._word_length = word_length
 
         self.session = requests.Session()
         self._secret : str = self._get_secret_word()
@@ -81,6 +81,10 @@ class Wordle:
             for i, row in enumerate(cls.keyboard):
                 if letter.character in row:
                     cls.keyboard[i][letter.character] = f"{color}{letter.character}{Fore.RESET}"
+
+    @property
+    def word_length(self)-> int:
+        return self._word_length
 
     @property
     def instance_secret(self)-> str:
