@@ -7,14 +7,11 @@ from colorama import Fore
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 
 from wordle.letter_state import LetterState
+from wordle.api_client import APIClient
 
 
 class Wordle:
     _max_number_of_attempts = 6
-    _dictionary_api_url = "https://api.dictionaryapi.dev/api/v2/entries/en/"
-    _dictionary_api_headers = {
-        "Accept": "application/json"
-    }
     
     keyboard = [
         {'Q': 'Q', 'W': 'W', 'E': 'E', 'R': 'R', 'T': 'T', 'Y': 'Y', 'U': 'U', 'I': 'I', 'O': 'O', 'P': 'P'},
@@ -25,7 +22,13 @@ class Wordle:
     def __init__(self, word_length: int):
         self._word_length = word_length
 
-        self.session = requests.Session()
+        self.dictionary_api_client = APIClient(
+            base_url="https://api.dictionaryapi.dev/api/v2/entries/en/",
+            api_headers = {
+                "Accept": "application/json"
+            }
+        )
+
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
 
@@ -112,13 +115,11 @@ class Wordle:
             return False 
 
         try:
-            r = self.session.request(
-                url=self._dictionary_api_url + self.word_to_check,
+            r = self.dictionary_api_client.request(
                 method="GET",
-                headers=self._dictionary_api_headers
+                endpoint=self.word_to_check
             )
 
-            r.raise_for_status()
             return True
         except HTTPError:
             return False
