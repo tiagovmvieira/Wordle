@@ -11,6 +11,9 @@ class Reporter:
     def report(self, **kwargs):
         if kwargs.get('initial_message'):
             print(Fore.CYAN + "\nPress ctrl + C to Give Up" + Fore.RESET)
+        if kwargs.get('game_configs'):
+            print(Fore.GREEN + f"\nGame Mode: " + Fore.RESET + f"{self.wordle._game_mode}\n"
+                + Fore.GREEN + "Word Length: " + Fore.RESET + f"{self.wordle.word_length}")
         if kwargs.get('characters_exceeded'):
             print(Fore.RED + f"Word must be {self.wordle.word_length} characters long!" + Fore.RESET)
         elif kwargs.get('word_not_found'):
