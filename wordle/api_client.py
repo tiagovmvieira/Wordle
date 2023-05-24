@@ -10,7 +10,7 @@ class APIClient:
         self.session = requests.Session()
     
     def request(self, method: str, endpoint: str, params: Union[None, dict, List[Tuple]] = None, data: Union[None, Dict[str, any]] = None,
-                headers: Dict[str, str] = None)-> requests.Response:
+                headers: Union[None, Dict[str, str]] = None)-> requests.Response:
         r = self.session.request(
             method=method,
             url=f"{self._base_url}{endpoint}",
