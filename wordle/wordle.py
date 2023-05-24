@@ -1,3 +1,4 @@
+import os
 import sys
 import maskpass
 import requests
@@ -19,8 +20,9 @@ class Wordle:
         {'Z': 'Z', 'X': 'X', 'C': 'C', 'V': 'V', 'B': 'B', 'N': 'N', 'M': 'M'}
     ]
 
-    def __init__(self, word_length: int):
+    def __init__(self, word_length: int, game_mode: str):
         self._word_length = word_length
+        self._game_mode = game_mode
 
         self.dictionary_api_client = APIClient(
             base_url="https://api.dictionaryapi.dev/api/v2/entries/en/",
@@ -29,17 +31,37 @@ class Wordle:
             }
         )
 
+        if self._game_mode == "single_player":
+            self.secret_generator_api_client = APIClient(
+                base_url="https://api.wordnik.com/v4",
+                api_headers = {
+                    "api_key": os.environ.get('API_KEY')
+                }
+            )
+
         self._secret : str = self._get_secret_word()
         self.attempts : list = []
 
     def _get_secret_word(self)-> str:
         while True:
             try:
-                self.word_to_check: str = maskpass.askpass(prompt="Enter the Secret Word: ", mask="*").upper()
+                if self._game_mode == "single_player":
+                    self.word_to_check: str = self.secret_generator_api_client.request(
+                        method="GET",
+                        endpoint="/words.json/randomWord",
+                        params= {
+                                "hasDictionaryDef": "true",
+                                "minLength": str(self._word_length),
+                                "maxLength": str(self._word_length)
+                        }
+                    ).json().get('word').upper()
+
+                else:
+                    self.word_to_check: str = maskpass.askpass(prompt="Enter the Secret Word: ", mask="*").upper()
 
                 if len(self.word_to_check) != self.word_length:
                     print(Fore.RED + f"Secret word must be {self.word_length} characters long!" + Fore.RESET)
-                elif not self.word_exist:
+                elif self._game_mode == "multi_player" and not self.word_exist:
                     print(Fore.RED + "Secret word provided does not exist in the English dictionary." + Fore.RESET)
                 else:
                     secret = self.word_to_check
@@ -88,6 +110,10 @@ class Wordle:
     @property
     def word_length(self)-> int:
         return self._word_length
+
+    @property
+    def game_mode(self)-> str:
+        return self._game_mode
 
     @property
     def instance_secret(self)-> str:
