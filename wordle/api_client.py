@@ -3,9 +3,9 @@ import requests
 from typing import Union, List, Tuple, Dict
 
 class APIClient:
-    def __init__(self, base_url: str, api_headers: dict):
+    def __init__(self, base_url: str, api_headers: Dict[str, str]):
         self._base_url = base_url
-        self._dictionary_api_headers = api_headers
+        self._api_headers = api_headers
 
         self.session = requests.Session()
     
@@ -16,7 +16,7 @@ class APIClient:
             url=f"{self._base_url}{endpoint}",
             params=params,
             json=data,
-            headers=headers if headers else self._dictionary_api_headers
+            headers=headers if headers else self._api_headers
         )
 
         r.raise_for_status()
