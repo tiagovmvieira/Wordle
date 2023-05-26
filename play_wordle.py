@@ -9,7 +9,7 @@ from wordle.reporter import Reporter
 def main():
     def parse_arguments():
         parser = argparse.ArgumentParser(description="Wordle Game CLI")
-        parser.add_argument("--word_lenght", type=int,
+        parser.add_argument("--word_length", type=int,
                             help="The length of the word to be guessed (default: %(default)s)",
                             choices=range(5, 11), default=5, metavar='[5-10]')
         parser.add_argument("--game_mode", type=str,
@@ -22,7 +22,7 @@ def main():
     load_dotenv()
 
     print("Hello Wordle!")
-    wordle = Wordle(word_length=args.word_lenght, game_mode=args.game_mode)
+    wordle = Wordle(word_length=args.word_length, game_mode=args.game_mode)
     reporter = Reporter(wordle=wordle)
     
     reporter.report(game_configs=True)
