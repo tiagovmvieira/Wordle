@@ -46,16 +46,18 @@ class Wordle:
         while True:
             try:
                 if self._game_mode == "single_player":
-                    self.word_to_check: str = self.secret_generator_api_client.request(
-                        method="GET",
-                        endpoint="/words.json/randomWord",
-                        params= {
-                                "hasDictionaryDef": "true",
-                                "minLength": str(self._word_length),
-                                "maxLength": str(self._word_length)
-                        }
-                    ).json().get('word').upper()
-
+                    try:
+                        self.word_to_check: str = self.secret_generator_api_client.request(
+                            method="GET",
+                            endpoint="/words.json/randomWord",
+                            params= {
+                                    "hasDictionaryDef": "true",
+                                    "minLength": str(self._word_length),
+                                    "maxLength": str(self._word_length)
+                            }
+                        ).json().get('word').upper()
+                    except (HTTPError, ConnectionError, Timeout, RequestException) as error:
+                        raise SystemError(f"Error on the API request - {error}")
                 else:
                     self.word_to_check: str = maskpass.askpass(prompt="Enter the Secret Word: ", mask="*").upper()
 
