@@ -3,7 +3,7 @@ import sys
 import maskpass
 import requests
 
-from typing import List
+from typing import List, Final
 from colorama import Fore
 from requests.exceptions import HTTPError, ConnectionError, Timeout, RequestException
 
@@ -12,7 +12,7 @@ from wordle.api_client import APIClient
 
 
 class Wordle:
-    _max_number_of_attempts = 6
+    _max_number_of_attempts : Final[int] = 6
     
     keyboard = [
         {'Q': 'Q', 'W': 'W', 'E': 'E', 'R': 'R', 'T': 'T', 'Y': 'Y', 'U': 'U', 'I': 'I', 'O': 'O', 'P': 'P'},
