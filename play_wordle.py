@@ -51,4 +51,5 @@ def main():
     reporter.report(final_message=True)
 
 if __name__ == '__main__':
+    print("Esta é a minha alteração")
     main()
